@@ -1,4 +1,5 @@
 import 'package:faker/faker.dart';
+import 'package:fordev/domain/entities/account_entity.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
@@ -10,9 +11,8 @@ import 'package:fordev/data/usecases/usecases.dart';
 
 class HttpClientSpy extends Mock implements HttpClient {
   @override
-  Future<void> request(
-          {required String url, required String method, Map? body}) async =>
-      Future.value();
+  Future<Map> request(
+          {required String url, required String method, Map? body});
 }
 
 void main() {
