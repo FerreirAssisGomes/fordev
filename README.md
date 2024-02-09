@@ -1,16 +1,5 @@
-# fordev
+4Dev Flutter - Enquetes para Programadores
 
-A new Flutter project.
+Essa aplicativo faz parte do treinamento do professor Rodrigo Manguinho (Mango) na Udemy.
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+O objetivo do treinamento é mostrar como criar um aplicativo com Flutter usando uma arquitetura bem definida e desacoplada, seguindo TDD (programação orientada a testes) como metodologia de trabalho, Clean Architecture para fazer a distribuição de responsabilidades em camadas, sempre seguindo os princípios do SOLID e aplicando Design Patterns para resolver alguns problemas comuns.
