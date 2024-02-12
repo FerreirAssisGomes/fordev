@@ -3,7 +3,8 @@
         {
             "name": "Flutter",
             "type": "dart",
-            "request": "launch"
+            "request": "launch",
+            "program": "lib/main/main.dart"
         },
         {
             "name": "Flutter: Run all Tests",
