@@ -7,15 +7,20 @@ import 'package:test/test.dart';
 
 class HttpAdapter {
   final Client client;
+  final headers = {
+    'content-type': 'application/json',
+    'accept': 'application/json'
+  };
   HttpAdapter(this.client);
   Future<void> request({required String url, required String method}) async {
-    await client.post(Uri.parse(url));
+    await client.post(Uri.parse(url), headers: headers);
   }
 }
 
 class ClientSpy extends Mock implements Client {
   @override
-  Future<Response> post(Uri url, {Map<String, String>? headers, Object? body, Encoding? encoding}) async {
+  Future<Response> post(Uri url,
+      {Map<String, String>? headers, Object? body, Encoding? encoding}) async {
     return Response('Test response body', 200);
   }
 }
@@ -29,7 +34,10 @@ void main() {
 
       await sut.request(url: url, method: 'post');
 
-      verify(client.post(Uri.parse(url)));
+      verify(client.post(Uri.parse(url), headers: {
+        'content-type': 'application/json',
+        'accept': 'application/json'
+      }));
     });
   });
 }
