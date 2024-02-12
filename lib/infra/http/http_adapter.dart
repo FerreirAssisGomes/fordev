@@ -10,29 +10,35 @@ class HttpAdapter implements HttpClient {
     'content-type': 'application/json',
     'accept': 'application/json'
   };
+
   HttpAdapter(this.client);
+
   Future<Map> request(
       {required String url, required String method, Map? body}) async {
     final jsonBody = body != null ? jsonEncode(body) : null;
-    final response =
+    var response = Response('', 500);
+
+  if(method=='post'){
+      response =
         await client.post(Uri.parse(url), headers: headers, body: jsonBody);
+  }
     return _handleResponse(response);
   }
 
   Map _handleResponse(Response response) {
     if (response.statusCode == 200) {
       return response.body.isEmpty ? null : jsonDecode(response.body);
-    } else if(response.statusCode==204){
+    } else if (response.statusCode == 204) {
       return {};
-    }else if(response.statusCode==400){
+    } else if (response.statusCode == 400) {
       throw HttpError.badRequest;
-    }else if(response.statusCode==401){
+    } else if (response.statusCode == 401) {
       throw HttpError.unauthorized;
-    }else if(response.statusCode==403){
+    } else if (response.statusCode == 403) {
       throw HttpError.Forbidden;
-    }else if(response.statusCode==404){
+    } else if (response.statusCode == 404) {
       throw HttpError.notFound;
-    }else{
+    } else {
       throw HttpError.serverError;
     }
   }

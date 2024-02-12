@@ -21,6 +21,13 @@ void main() {
   final client = ClientSpy();
   final sut = HttpAdapter(client);
   final url = faker.internet.httpUrl();
+  group('sharde', () {
+    test('Should throws ServerError if invalid method is provided', () async {
+      final future = await sut.request(url: url, method: 'invalid_method');
+
+      expect(future, throwsA(HttpError.serverError));
+    });
+  });
 
   group('post', () {
     PostExpectation mockRequest() =>
@@ -107,7 +114,7 @@ void main() {
       expect(future, throwsA(HttpError.unauthorized));
     });
 
-     test('Should return ForbiddenError if post returns 403', () async {
+    test('Should return ForbiddenError if post returns 403', () async {
       mockResponse(403);
 
       final future = sut.request(url: url, method: 'post');
