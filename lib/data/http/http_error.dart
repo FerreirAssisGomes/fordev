@@ -3,5 +3,7 @@ enum HttpError{
   notFound,
   serverError,
   unauthorized,
+  Forbidden,
   inavalidData
+  
 }
