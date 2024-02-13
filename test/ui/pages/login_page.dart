@@ -81,4 +81,14 @@ StreamController<String> passwordErrorController = StreamController<String>();
     await tester.pump();
     expect(find.text('any error'), findsOneWidget);
   });
+
+    testWidgets('should present no error if password is valid',
+      (WidgetTester tester) async {
+    await loadPage(tester);
+    passwordErrorController.add('');
+    await tester.pump();
+    expect(find.descendant(
+        of: find.bySemanticsLabel('Senha'), matching: find.byType(Text)), findsOneWidget);
+  });
 }
+ 
