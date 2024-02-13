@@ -13,6 +13,7 @@ void main() {
 
   StreamController<String> emailErrorController = StreamController<String>();
   StreamController<String> passwordErrorController = StreamController<String>();
+  StreamController<String> mainErrorController = StreamController<String>();
   StreamController<bool> isFormValidController = StreamController<bool>();
   StreamController<bool> isLoadingController = StreamController<bool>();
 
@@ -21,6 +22,8 @@ void main() {
         .thenAnswer((_) => emailErrorController.stream);
     when(presenter.passwordErrorStream)
         .thenAnswer((_) => passwordErrorController.stream);
+    when(presenter.mainErrorStream)
+        .thenAnswer((_) => mainErrorController.stream);
     when(presenter.isFormValidStream)
         .thenAnswer((_) => isFormValidController.stream);
     when(presenter.isLoadingStream)
@@ -32,6 +35,7 @@ void main() {
   tearDown(() {
     emailErrorController.close();
     passwordErrorController.close();
+    mainErrorController.close();
     isFormValidController.close();
     isLoadingController.close();
   });
@@ -154,5 +158,14 @@ void main() {
     await tester.pump();
 
     expect(find.byType(CircularProgressIndicator), findsNothing);
+  });
+
+  testWidgets('should error message if authentication fails',
+      (WidgetTester tester) async {
+    await loadPage(tester);
+    mainErrorController.add('main error');
+    await tester.pump();
+
+    expect(find.text('main error'), findsOneWidget);
   });
 }
