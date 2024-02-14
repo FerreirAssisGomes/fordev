@@ -4,3 +4,4 @@ import '../ui/components/component.dart';
 void main() {
   runApp(App());
 }
+

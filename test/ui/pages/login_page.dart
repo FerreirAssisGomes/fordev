@@ -18,6 +18,11 @@ void main() {
   StreamController<bool> isLoadingController = StreamController<bool>();
 
   Future<void> loadPage(WidgetTester tester) async {
+    final loginPage = MaterialApp(home: LoginPage(presenter));
+    await tester.pumpWidget(loginPage);
+  }
+
+  setUp(() {
     when(presenter.emailErrorStream)
         .thenAnswer((_) => emailErrorController.stream);
     when(presenter.passwordErrorStream)
@@ -28,10 +33,8 @@ void main() {
         .thenAnswer((_) => isFormValidController.stream);
     when(presenter.isLoadingStream)
         .thenAnswer((_) => isLoadingController.stream);
-    final loginPage = MaterialApp(home: LoginPage(presenter));
-    await tester.pumpWidget(loginPage);
-  }
-
+  });
+  
   tearDown(() {
     emailErrorController.close();
     passwordErrorController.close();
