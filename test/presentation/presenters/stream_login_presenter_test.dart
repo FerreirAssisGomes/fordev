@@ -14,18 +14,17 @@ class StreamLoginPresenter {
   }
 }
 
-class ValidationSpy extends Mock implements Validation {
-
-}
+class ValidationSpy extends Mock implements Validation {}
 
 void main() {
-  test('Should call Validation with correct email', () {
-    final validation = ValidationSpy();
+  final validation = ValidationSpy();
     final sut = StreamLoginPresenter(validation: validation);
     final email = faker.internet.email();
 
+  setUp(() {});
+  
+  test('Should call Validation with correct email', () {
     sut.validateEmail(email);
-
     verify(validation.validate(field: 'email', value: email)).called(1);
   });
 }
