@@ -54,8 +54,8 @@ void main() {
     when(validation.validate(field: 'password', value: password))
         .thenReturn('error');
 
-    sut.PasswordErrorStream.listen(
-        expectAsync1((error) => expect(error, 'error')));
+    sut.passwordErrorStream
+        .listen(expectAsync1((error) => expect(error, 'error')));
 
     sut.isFormValidStream
         .listen(expectAsync1((isValid) => expect(isValid, false)));
@@ -66,7 +66,7 @@ void main() {
   });
 
   test('Should emit password null if validation succeeds', () {
-    sut.PasswordErrorStream.listen(expectAsync1((error) => expect(error, '')));
+    sut.passwordErrorStream.listen(expectAsync1((error) => expect(error, '')));
 
     sut.isFormValidStream
         .listen(expectAsync1((isValid) => expect(isValid, false)));
@@ -76,18 +76,13 @@ void main() {
     sut.validatePassword(password);
   });
 
-  test('Should emit password null if validation fails', () {
-    when(validation.validate(field: 'email', value: 'error'))
-        .thenReturn('error');
+  test('Should emit password null if validation success', () async {
+    sut.emailErrorStream.listen(expectAsync1((error) => expect(error, '')));
+    sut.passwordErrorStream.listen(expectAsync1((error) => expect(error, '')));
+    expectLater(sut.isFormValidStream, emitsInOrder([false, true]));
 
-    sut.emailErrorStream
-        .listen(expectAsync1((error) => expect(error, 'error')));
-    sut.PasswordErrorStream.listen(expectAsync1((error) => expect(error, '')));
-    sut.isFormValidStream
-        .listen(expectAsync1((isValid) => expect(isValid, false)));
-    
     sut.validateEmail(email);
-
+    await Future.delayed(Duration.zero);
     sut.validatePassword(password);
   });
-}
+}  
