@@ -1,4 +1,5 @@
 import 'package:faker/faker.dart';
+import 'package:fordev/domain/helpers/domain_error.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
@@ -115,6 +116,19 @@ void main() {
     expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
 
     await sut.auth();
+  });
 
+  test('Should emit correct events on InvalidCredentialsError', () async {
+    when(authentication
+            .auth(AuthenticationParams(email: email, secret: password)))
+        .thenThrow(DomainError.invalidCredentials);
+
+    sut.validateEmail(email);
+    sut.validatePassword(password);
+
+    expectLater(sut.isLoadingStream, emits(false));
+    sut.mainErrorStream.listen(expectAsync1((error) => expect(error, 'Credenciais inválidas')));
+
+    await sut.auth();
   });
 }
