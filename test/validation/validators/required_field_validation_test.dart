@@ -1,20 +1,5 @@
 import 'package:test/test.dart';
-
-abstract class FieldValidation {
-  String get field;
-  String validation(String value);
-}
-
-class RequiredFieldValidation implements FieldValidation {
-  final String field;
-
-  RequiredFieldValidation(this.field);
-
-  @override
-  String validation(String? value) {
-    return value?.isNotEmpty==true? '':'campo obrigatório';
-  }
-}
+import 'package:fordev/validation/validators/validators.dart';
 
 void main() {
   final sut = RequiredFieldValidation('any_field');
