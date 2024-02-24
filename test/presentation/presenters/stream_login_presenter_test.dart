@@ -2,23 +2,23 @@ import 'package:faker/faker.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
-import 'package:fordev/domain/usecases/authentication.dart';
+import 'package:fordev/domain/entities/entities.dart';
+import 'package:fordev/domain/usecases/usecases.dart';
 
 import 'package:fordev/presentation/presenters/presenters.dart';
 import 'package:fordev/presentation/protocols/protocols.dart';
 
 class ValidationSpy extends Mock implements Validation {}
 
-class AuthenticationSpy extends Mock implements Authentication {
-  
-}
+class AuthenticationSpy extends Mock implements Authentication {}
 
 void main() {
   final validation = ValidationSpy();
   final email = faker.internet.email();
   final password = faker.internet.password();
   AuthenticationSpy authentication = AuthenticationSpy();
-  final sut = StreamLoginPresenter(validation: validation,authentication:authentication);
+  final sut = StreamLoginPresenter(
+      validation: validation, authentication: authentication);
 
   setUp(() {});
 
@@ -102,5 +102,19 @@ void main() {
     verify(authentication
             .auth(AuthenticationParams(email: email, secret: password)))
         .called(1);
+  });
+
+  test('Should emit correct events on Authentication success', () async {
+    when(authentication
+            .auth(AuthenticationParams(email: email, secret: password)))
+        .thenAnswer((_) async => AccountEntity(faker.guid.guid()));
+
+    sut.validateEmail(email);
+    sut.validatePassword(password);
+
+    expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
+
+    await sut.auth();
+
   });
 }
