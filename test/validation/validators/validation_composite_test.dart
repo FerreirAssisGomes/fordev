@@ -11,7 +11,7 @@ class ValidationComposite implements Validation {
   @override
   String validate({required String field, required String value}) {
     String error = '';
-    for (final validation in validations) {
+    for (final validation in validations.where((element) => element.field==field)) {
       error = validation.validate(value);
       if(error.isNotEmpty==true){
         return error;
@@ -45,6 +45,18 @@ void main() {
 
   test('Should return the first error', () {
     when(validation1.field).thenReturn('any_field');
+    when(validation1.validate('')).thenReturn('error_1');
+
+    when(validation2.field).thenReturn('any_field');
+    when(validation2.validate('')).thenReturn('error_2');
+
+    final error = sut.validate(field: 'any_filed', value: '');
+    expect(error, 'error_1');
+  });
+
+  
+  test('Should return the first error', () {
+    when(validation1.field).thenReturn('other_field');
     when(validation1.validate('')).thenReturn('error_1');
 
     when(validation2.field).thenReturn('any_field');
