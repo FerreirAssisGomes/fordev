@@ -19,7 +19,7 @@ class LoginState {
 
 class StreamLoginPresenter {
   final Validation validation;
-  final _controller = StreamController<LoginState>.broadcast();
+  var _controller = StreamController<LoginState>.broadcast();
   final _state = LoginState();
   final Authentication authentication;
 
@@ -67,5 +67,10 @@ class StreamLoginPresenter {
     }
     _state.isLoading = false;
     _update();
+  }
+
+  void dispose() {
+    _controller.close();
+    //_controller = null;
   }
 }
