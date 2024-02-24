@@ -11,6 +11,7 @@ void main() {
   final validation = ValidationSpy();
   final sut = StreamLoginPresenter(validation: validation);
   final email = faker.internet.email();
+  final password = faker.internet.password();
 
   setUp(() {});
 
@@ -34,8 +35,7 @@ void main() {
   });
 
   test('Should emit null if validation succeeds', () {
-    sut.emailErrorStream
-        .listen(expectAsync1((error) => expect(error, '')));
+    sut.emailErrorStream.listen(expectAsync1((error) => expect(error, '')));
 
     sut.isFormValidStream
         .listen(expectAsync1((isValid) => expect(isValid, false)));
@@ -43,5 +43,10 @@ void main() {
     sut.validateEmail(email);
 
     sut.validateEmail(email);
+  });
+
+  test('Should call Validation with correct password', () {
+    sut.validatePassword(password);
+    verify(validation.validate(field: 'password', value: password)).called(1);
   });
 }
