@@ -9,7 +9,14 @@ void showLoading(BuildContext context) {
         Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            CircularProgressIndicator(),
+            Theme(
+              data: Theme.of(context).copyWith(
+                colorScheme: Theme.of(context).colorScheme.copyWith(
+                    primary: Color.fromRGBO(136, 14, 79,
+                        1)),
+              ),
+              child: CircularProgressIndicator(),
+            ),
             SizedBox(
               height: 10,
             ),

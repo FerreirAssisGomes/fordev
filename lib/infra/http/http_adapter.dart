@@ -28,19 +28,24 @@ class HttpAdapter implements HttpClient {
     return _handleResponse(response);
   }
 
+
   Map _handleResponse(Response response) {
-    if (response.statusCode == 200) {
-      return response.body.isEmpty ? null : jsonDecode(response.body);
-    } else if (response.statusCode == 204) {
-      return {};
-    } else if (response.statusCode == 400) {
-      throw HttpError.badRequest;
-    } else if (response.statusCode == 401) {
-      throw HttpError.unauthorized;
-    } else if (response.statusCode == 403) {
-      throw HttpError.Forbidden;
-    } else if (response.statusCode == 404) {
-      throw HttpError.notFound;
+    if (response.headers['content-type'] == 'application/json') {
+      if (response.statusCode == 200) {
+        return response.body.isEmpty ? null : jsonDecode(response.body);
+      } else if (response.statusCode == 204) {
+        return {};
+      } else if (response.statusCode == 400) {
+        throw HttpError.badRequest;
+      } else if (response.statusCode == 401) {
+        throw HttpError.unauthorized;
+      } else if (response.statusCode == 403) {
+        throw HttpError.Forbidden;
+      } else if (response.statusCode == 404) {
+        throw HttpError.notFound;
+      } else {
+        throw HttpError.serverError;
+      }
     } else {
       throw HttpError.serverError;
     }

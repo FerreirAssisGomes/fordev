@@ -13,6 +13,8 @@ dependencies:
   http:
   provider:
   equatable:
+  get:
+  
   
 
 dev_dependencies:
