@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:fordev/main/factories/pages/login/login_page_factory.dart';
 import 'package:get/route_manager.dart';
+
 import '../ui/components/component.dart';
+import './factories/factories.dart';
 
 void main() {
   runApp(App());
