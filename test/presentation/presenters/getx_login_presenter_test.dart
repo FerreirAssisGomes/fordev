@@ -122,6 +122,21 @@ void main() {
     verify(saveCurrentAccount.save(AccountEntity(token))).called(1);
   });
 
+
+  test('Should emit UnexpectedError if SaveCurrentAccount fails', () async {
+    when(saveCurrentAccount.save(AccountEntity(token)))
+        .thenThrow(DomainError.unexpected);
+
+    sut.validateEmail(email);
+    sut.validatePassword(password);
+
+    expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
+    sut.mainErrorStream.listen(expectAsync1((error) =>
+        expect(error, 'Algo errado aconteceu, Tente novamente embreve.')));
+
+    await sut.auth();
+  });
+
   test('Should emit correct events on Authentication success', () async {
     when(authentication
             .auth(AuthenticationParams(email: email, secret: password)))
@@ -164,4 +179,6 @@ void main() {
 
     await sut.auth();
   });
+
+  
 }
