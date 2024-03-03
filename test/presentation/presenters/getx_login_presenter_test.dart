@@ -13,13 +13,17 @@ class ValidationSpy extends Mock implements Validation {}
 
 class AuthenticationSpy extends Mock implements Authentication {}
 
+class SaveCurrentAccountSpy extends Mock implements SaveCurrentAccount {}
+
 void main() {
   final validation = ValidationSpy();
   final email = faker.internet.email();
   final password = faker.internet.password();
+  final token = faker.guid.guid();
   AuthenticationSpy authentication = AuthenticationSpy();
+  SaveCurrentAccountSpy saveCurrentAccount = SaveCurrentAccountSpy();
   final sut = GetxLoginPresenter(
-      validation: validation, authentication: authentication);
+      validation: validation, authentication: authentication,saveCurrentAccount:saveCurrentAccount);
 
   setUp(() {});
 
@@ -105,10 +109,23 @@ void main() {
         .called(1);
   });
 
+  test('Should call SaveCurrentAccount with correct value', () async {
+    when(authentication
+            .auth(AuthenticationParams(email: email, secret: password)))
+        .thenAnswer((_) async => AccountEntity(token));
+
+    sut.validateEmail(email);
+    sut.validatePassword(password);
+
+    await sut.auth();
+
+    verify(saveCurrentAccount.save(AccountEntity(token))).called(1);
+  });
+
   test('Should emit correct events on Authentication success', () async {
     when(authentication
             .auth(AuthenticationParams(email: email, secret: password)))
-        .thenAnswer((_) async => AccountEntity(faker.guid.guid()));
+        .thenAnswer((_) async => AccountEntity(token));
 
     sut.validateEmail(email);
     sut.validatePassword(password);
@@ -126,7 +143,7 @@ void main() {
     sut.validateEmail(email);
     sut.validatePassword(password);
 
-    expectLater(sut.isLoadingStream, emitsInOrder([true,false]));
+    expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
     sut.mainErrorStream.listen(
         expectAsync1((error) => expect(error, 'Credenciais inválidas.')));
 
@@ -141,12 +158,10 @@ void main() {
     sut.validateEmail(email);
     sut.validatePassword(password);
 
-    expectLater(sut.isLoadingStream, emitsInOrder([true,false]));
+    expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
     sut.mainErrorStream.listen(expectAsync1((error) =>
         expect(error, 'Algo errado aconteceu, Tente novamente embreve.')));
 
     await sut.auth();
   });
-
-   
 }

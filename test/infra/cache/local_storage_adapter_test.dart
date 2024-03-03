@@ -10,7 +10,7 @@ class FlutterSecureStorageMockSpy extends Mock implements FlutterSecureStorage {
 
 void main() {
   final secureStorage = FlutterSecureStorageMockSpy();
-  final sut = LocalStorageAdapter(secureStorage);
+  final sut = LocalStorageAdapter(secureStorage:secureStorage);
   final key = faker.lorem.word();
   final value = faker.guid.guid();
   test('Should call save secure with correct values', () async {
